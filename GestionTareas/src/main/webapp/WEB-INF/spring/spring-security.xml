@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<bean:beans 
+xmlns:bean="http://www.springframework.org/schema/beans"
+xmlns:xsi-="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://www.springframework.org/schema/security"
+xsi-:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+<http auto-config="true">
+    <intercept-url pattern="/" access="permitAll" />
+    <intercept-url pattern="/tareas" access="hasAnyAuthority('Usuario','Administrativo')" />
+	<intercept-url pattern="/crear_tarea" access="hasAnyAuthority('Administrativo')" />
+
+    <form-login login-page="/login"
+            authentication-failure-url="/error" 
+            username-parameter="usuario"
+            password-parameter="contrasena"/>
+    <csrf disabled="true"/>        
+    <logout logout-success-url="/login" />        
+</http>
+	
+	<!-- Usuarios. -->
+	<authentication-manager>
+		<authentication-provider>
+			<password-encoder hash="bcrypt" />			
+			<user-service>
+				<user name="admin" authorities="Administrativo"
+					password="$2a$10$pfYnwprItNATg2cXlGcl9OR4QumCmxuCAjDldw7o5Mpdck.hFumIW" />
+				<user name="usuario1" authorities="Usuario"
+					password="$2a$10$EpOmb338NGD8E.lGSn..SONTlOQQE4/RRyC37jAPJ67BPxTxAiosy" />		
+				<user name="usuario2" authorities="Usuario"
+					password="$2a$10$EpOmb338NGD8E.lGSn..SONTlOQQE4/RRyC37jAPJ67BPxTxAiosy" />		
+			</user-service> 			
+		</authentication-provider>
+	</authentication-manager>
+
+</bean:beans>
